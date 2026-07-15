@@ -18,6 +18,39 @@
     <div id="recipe-list" class="recipe-grid"></div>
   </main>
 
+  <!-- Tarif Ekleme Modal -->
+  <div id="modal-overlay" class="overlay hidden">
+    <div id="modal" class="modal">
+      <div class="modal-header">
+        <h2>Yeni Tarif</h2>
+        <button id="btn-close-modal" class="btn-icon">✕</button>
+      </div>
+      <form id="form-add" class="modal-body">
+        <label class="field">
+          <span>Tarif Adı</span>
+          <input type="text" name="title" placeholder="örn. Mercimek Çorbası" required>
+        </label>
+        <label class="field">
+          <span>Porsiyon Sayısı</span>
+          <input type="number" name="baseServings" value="4" min="1" required>
+        </label>
+        <label class="field">
+          <span>Hazırlanışı</span>
+          <textarea name="instructions" rows="3" placeholder="Tarif adımları..."></textarea>
+        </label>
+        <div class="field">
+          <span>Malzemeler</span>
+          <div id="ingredients-list"></div>
+          <button type="button" id="btn-add-ingredient" class="btn-secondary">+ Malzeme Ekle</button>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel" class="btn-secondary">İptal</button>
+          <button type="submit" class="btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="/js/app.js"></script>
 </body>
 </html>
