@@ -37,18 +37,3 @@ dotnet test RecipeApi.Tests/RecipeApi.Tests.csproj \
   --settings coverlet.runsettings \
   --results-directory ./coverage
 ```
-
-## CI/CD + SonarCloud kurulumu
-
-1. [sonarcloud.io](https://sonarcloud.io) üzerinde GitHub hesabınla giriş yap, bu repoyu "import" et.
-2. Sonar'ın sana verdiği **project key** ve **organization key**'i `.github/workflows/ci.yml` içindeki
-   `CHANGE_ME_sonar-project-key` ve `CHANGE_ME_sonar-org` yerlerine yaz.
-3. SonarCloud'da bir **token** üret (My Account → Security → Generate Token).
-4. GitHub repo → Settings → Secrets and variables → Actions → New repository secret:
-   - Name: `SONAR_TOKEN`
-   - Value: (ürettiğin token)
-5. `main` branch'ine push/PR attığında Actions sekmesinde workflow otomatik çalışır; SonarCloud dashboard'unda coverage ve code smell raporlarını görürsün.
-
-## Neden bu proje?
-
-Bu proje, StockBridge'de uygulanan xUnit + Moq + GitHub Actions CI + SonarCloud kurulumunu farklı ve daha küçük bir domain üzerinde tekrar ederek pekiştirmek amacıyla sıfırdan yazıldı.
