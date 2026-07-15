@@ -18,6 +18,34 @@
     <div id="recipe-list" class="recipe-grid"></div>
   </main>
 
+  <!-- Tarif Detay Paneli -->
+  <div id="detail-overlay" class="overlay hidden"></div>
+  <aside id="detail-panel" class="detail-panel hidden">
+    <div class="panel-header">
+      <h2 id="detail-title"></h2>
+      <button id="btn-close-detail" class="btn-icon">✕</button>
+    </div>
+    <div class="panel-body">
+      <p id="detail-instructions" class="instructions"></p>
+
+      <section class="ingredient-section">
+        <h3>Malzemeler <span id="detail-base-servings" class="badge"></span></h3>
+        <ul id="detail-ingredients"></ul>
+      </section>
+
+      <section class="scale-section">
+        <h3>Porsiyon Ölçekleme</h3>
+        <div class="scale-controls">
+          <button id="btn-scale-dec" class="btn-icon">−</button>
+          <span id="scale-value" class="scale-number">4</span>
+          <button id="btn-scale-inc" class="btn-icon">+</button>
+          <span class="scale-label">kişilik</span>
+        </div>
+        <ul id="scaled-ingredients" class="scaled-list"></ul>
+      </section>
+    </div>
+  </aside>
+
   <!-- Tarif Ekleme Modal -->
   <div id="modal-overlay" class="overlay hidden">
     <div id="modal" class="modal">

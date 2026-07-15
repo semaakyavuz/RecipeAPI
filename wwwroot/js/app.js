@@ -31,10 +31,72 @@ function renderList(recipes) {
   `).join('');
 }
 
-function openDetail(id) {
-  // genişletilecek
-  console.log('openDetail', id);
+// ─── Detail Panel & Scaling ───────────────────────────────────
+
+let activeRecipeId = null;
+let scaleTarget = 4;
+let scaleDebounce = null;
+
+async function openDetail(id) {
+  const res = await fetch(`${API}/${id}`);
+  if (!res.ok) return;
+  const r = await res.json();
+
+  activeRecipeId = r.id;
+  scaleTarget = r.baseServings;
+
+  document.getElementById('detail-title').textContent = r.title;
+  document.getElementById('detail-instructions').textContent = r.instructions || '';
+  document.getElementById('detail-base-servings').textContent = `${r.baseServings} kişilik tarif`;
+  document.getElementById('scale-value').textContent = scaleTarget;
+  document.getElementById('scaled-ingredients').innerHTML = '';
+
+  const ul = document.getElementById('detail-ingredients');
+  ul.innerHTML = (r.recipeIngredients || []).map(ri =>
+    `<li>
+       <span class="ing-name">${esc(ri.ingredient?.name)}</span>
+       <span class="ing-amount">${ri.amount} ${esc(ri.unit)}</span>
+     </li>`
+  ).join('') || '<li class="empty">Malzeme yok.</li>';
+
+  document.getElementById('detail-overlay').classList.remove('hidden');
+  document.getElementById('detail-panel').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
 }
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.add('hidden');
+  document.getElementById('detail-panel').classList.add('hidden');
+  document.body.style.overflow = '';
+  activeRecipeId = null;
+}
+
+function adjustScale(delta) {
+  scaleTarget = Math.max(1, scaleTarget + delta);
+  document.getElementById('scale-value').textContent = scaleTarget;
+  clearTimeout(scaleDebounce);
+  scaleDebounce = setTimeout(fetchScaled, 350);
+}
+
+async function fetchScaled() {
+  if (!activeRecipeId) return;
+  const list = document.getElementById('scaled-ingredients');
+  list.innerHTML = '<li class="loading">Hesaplanıyor…</li>';
+  const res = await fetch(`${API}/${activeRecipeId}/scale/${scaleTarget}`);
+  if (!res.ok) { list.innerHTML = '<li class="error">Hesaplanamadı.</li>'; return; }
+  const items = await res.json();
+  list.innerHTML = items.map(s =>
+    `<li>
+       <span class="ing-name">${esc(s.ingredientName)}</span>
+       <span class="ing-amount">${s.amount} ${esc(s.unit)}</span>
+     </li>`
+  ).join('') || '<li class="empty">Malzeme yok.</li>';
+}
+
+document.getElementById('btn-scale-dec').addEventListener('click', () => adjustScale(-1));
+document.getElementById('btn-scale-inc').addEventListener('click', () => adjustScale(+1));
+document.getElementById('btn-close-detail').addEventListener('click', closeDetail);
+document.getElementById('detail-overlay').addEventListener('click', closeDetail);
 
 // ─── Add Recipe Modal ─────────────────────────────────────────
 
